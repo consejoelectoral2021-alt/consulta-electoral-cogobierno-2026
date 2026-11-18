@@ -4,17 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#1769aa">
-  <meta name="description" content="Consulta individual de recinto y junta electoral UTC Cogobierno 2026–2028.">
-  <title>Consulta Electoral UTC | Cogobierno 2026–2028</title>
-  <link rel="stylesheet" href="assets/styles.css">
-  <script src="config.js?v=20261118-1"></script>
-  <script defer src="assets/app.js"></script>
+  <meta name="description" content="Consulta electoral del Consejo Electoral de la Universidad Técnica de Cotopaxi, Cogobierno 2026–2028.">
+  <title>Consejo Electoral UTC | Consulta Cogobierno 2026–2028</title>
+  <link rel="stylesheet" href="assets/styles.css?v=20261118-2">
+  <script src="config.js?v=20261118-2"></script>
+  <script defer src="assets/app.js?v=20261118-2"></script>
 </head>
 <body>
   <main class="shell">
     <header class="brand">
       <div class="brand-logo"><img src="assets/utc-logo-consejo-electoral.png" alt="Universidad Técnica de Cotopaxi — Secretaría General, Consejo Electoral"></div>
-      <div class="brand-title"><p class="eyebrow">Cogobierno 2026–2028</p><h1>Consulta electoral</h1></div>
+      <div class="brand-title"><p class="eyebrow">Universidad Técnica de Cotopaxi</p><h1>Consulta Electoral · Cogobierno 2026–2028</h1></div>
     </header>
 
     <section class="search-card" aria-labelledby="search-title">
@@ -37,8 +37,9 @@
           <div><dt>Junta receptora</dt><dd id="station"></dd></div>
           <div><dt>Extensión / sede</dt><dd id="campus"></dd></div>
         </dl></article>
-        <article class="info-card location-card"><h3><span aria-hidden="true">⌖</span> Ubicación del recinto</h3><div class="location-body"><strong id="map-place"></strong><p id="address"></p><a id="map-link" class="map-button" target="_blank" rel="noopener noreferrer" hidden>↗ &nbsp;Cómo llegar</a><p class="map-note" id="map-note">La dirección y ruta se habilitarán cuando la UTC confirme la ubicación.</p></div></article>
+        <article class="info-card location-card"><h3><span aria-hidden="true">⌖</span> Ubicación del recinto</h3><div class="location-body"><strong id="map-place"></strong><p id="address"></p><a id="map-link" class="map-button" target="_blank" rel="noopener noreferrer" hidden>↗ &nbsp;Cómo llegar con Google Maps</a><a id="map-source-link" class="map-source-link" target="_blank" rel="noopener noreferrer" hidden>Ver ubicación exacta en Google Maps</a><p class="map-note" id="map-note">La dirección y ruta se habilitarán cuando la UTC confirme la ubicación exacta.</p></div></article>
       </div>
+      <div class="result-actions"><button id="print-result" class="print-button" type="button">Imprimir consulta</button></div>
       <p class="privacy-note">Esta consulta muestra únicamente el registro asociado a la cédula ingresada. Evita usar equipos compartidos.</p>
     </section>
     <footer>© 2026 Universidad Técnica de Cotopaxi · Todos los derechos reservados</footer>
