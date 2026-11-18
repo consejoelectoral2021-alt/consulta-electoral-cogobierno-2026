@@ -1,0 +1,8 @@
+.private/
+*.sql
+*.xlsx
+*.xls
+__pycache__/
+*.pyc
+.wrangler/
+.dev.vars
