@@ -4,6 +4,7 @@
   const submit = document.querySelector("#submit");
   const message = document.querySelector("#message");
   const result = document.querySelector("#result");
+  const printButton = document.querySelector("#print-result");
   const cfg = window.UTC_ELECTORAL_CONFIG || {};
   let turnstileToken = "";
 
@@ -30,6 +31,45 @@
     message.hidden = false;
   }
 
+  function makeDirectionsUrl(record) {
+    const latitude = Number(record.latitude);
+    const longitude = Number(record.longitude);
+    let destination = "";
+    if (Number.isFinite(latitude) && latitude >= -90 && latitude <= 90 && Number.isFinite(longitude) && longitude >= -180 && longitude <= 180) {
+      destination = `${latitude},${longitude}`;
+    } else if (typeof record.address === "string" && record.address.trim() && !/pendiente de confirmación/i.test(record.address)) {
+      destination = [record.address.trim(), record.campus, record.pollingPlace, "Ecuador"].filter(Boolean).join(", ");
+    }
+    if (destination) {
+      const params = new URLSearchParams({ api: "1", destination, travelmode: "driving" });
+      return `https://www.google.com/maps/dir/?${params.toString()}`;
+    }
+    return "";
+  }
+
+  function getSiteLocation(record) {
+    const locations = cfg.siteLocations || {};
+    const normalize = (value) => String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("es").trim();
+    for (const candidate of [record.campus, record.pollingPlace]) {
+      const location = locations[normalize(candidate)];
+      if (location) return { ...record, ...location };
+    }
+    return record;
+  }
+
+  function validGoogleMapsUrl(value) {
+    if (!value) return "";
+    try {
+      const url = new URL(value);
+      const allowedHost = url.hostname === "maps.app.goo.gl" || url.hostname === "maps.google.com" || url.hostname === "www.google.com";
+      return url.protocol === "https:" && allowedHost && (url.hostname !== "www.google.com" || url.pathname.startsWith("/maps")) ? url.href : "";
+    } catch {
+      return "";
+    }
+  }
+
+  printButton?.addEventListener("click", () => window.print());
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const cedula = input.value.replace(/\D/g, "");
@@ -51,17 +91,23 @@
       if (response.status === 403) return showMessage("No se pudo validar la verificación de seguridad. Inténtalo nuevamente.", true);
       if (!response.ok || !data.record) throw new Error("lookup_failed");
       const r = data.record;
+      const site = getSiteLocation(r);
       document.querySelector("#person-name").textContent = r.name;
       document.querySelector("#person-id").textContent = `C.I. ${r.cedula}`;
       document.querySelector("#place").textContent = r.pollingPlace;
       document.querySelector("#map-place").textContent = r.pollingPlace;
       document.querySelector("#station").textContent = r.station;
       document.querySelector("#campus").textContent = r.campus || "—";
-      document.querySelector("#address").textContent = r.address || "Dirección pendiente de confirmación institucional.";
+      document.querySelector("#address").textContent = site.address || "Dirección pendiente de confirmación institucional.";
       const link = document.querySelector("#map-link");
-      if (r.mapsUrl) { link.href = r.mapsUrl; link.hidden = false; }
+      const directionsUrl = makeDirectionsUrl(site);
+      if (directionsUrl) { link.href = directionsUrl; link.hidden = false; }
       else link.hidden = true;
-      document.querySelector("#map-note").hidden = Boolean(r.mapsUrl);
+      const sourceLink = document.querySelector("#map-source-link");
+      const savedMapUrl = validGoogleMapsUrl(site.mapsUrl);
+      if (savedMapUrl) { sourceLink.href = savedMapUrl; sourceLink.hidden = false; }
+      else sourceLink.hidden = true;
+      document.querySelector("#map-note").hidden = Boolean(directionsUrl);
       result.hidden = false;
       input.value = "";
     } catch {
