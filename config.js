@@ -1,7 +1,7 @@
-/* Complete solo después de crear el Worker y Turnstile institucionales. */
+/* Configuración pública del sitio UTC; la clave secreta permanece solo en el Worker. */
 window.UTC_ELECTORAL_CONFIG = {
-  apiBaseUrl: "",
-  turnstileSiteKey: "",
+  apiBaseUrl: "https://utc-electoral-consulta-api.cogobierno-2026-2028.workers.dev",
+  turnstileSiteKey: "0x4AAAAAAGH7te6IQjzSLzwD",
   electionLabel: "Cogobierno 2026–2028",
   siteLocations: {
     "la matriz": {
